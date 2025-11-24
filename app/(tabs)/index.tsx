@@ -9,11 +9,13 @@ import useTheme from "@/hooks/useTheme";
 import { Ionicons } from "@expo/vector-icons";
 import { useMutation, useQuery } from "convex/react";
 import { LinearGradient } from "expo-linear-gradient";
+import { useState } from "react";
 import {
   Alert,
   FlatList,
   StatusBar,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -23,15 +25,54 @@ type Todo = Doc<"todos">;
 
 export default function Index() {
   const { colors } = useTheme();
-
   const homeStyles = createHomeStyles(colors);
 
   const todos = useQuery(api.todos.getTodos);
   const toggleTodo = useMutation(api.todos.toggleTodo);
+  const deleteTodo = useMutation(api.todos.deleteTodo);
+  const updateTodo = useMutation(api.todos.updateTodo);
+
+  const [edittingId, setEdittingId] = useState<Id<"todos"> | null>(null);
+  const [editText, setEditText] = useState("");
+
+  const handleEditTodo = (todo: Todo) => {
+    setEditText(todo.text);
+    setEdittingId(todo._id);
+  };
+
+  const handleSaveEdit = async () => {
+    if (edittingId) {
+      try {
+        await updateTodo({ id: edittingId, text: editText.trim() });
+        setEdittingId(null);
+        setEditText("");
+      } catch (error) {
+        console.log("Error updating the todo", error);
+        Alert.alert("Error", "Failed to update the todo");
+      }
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEdittingId(null);
+    setEditText("");
+  };
 
   const isLoading = todos === undefined;
 
   if (isLoading) return <LoadingSpinner />;
+
+  // delete todo func
+  const handleDeleteTodo = async (id: Id<"todos">) => {
+    Alert.alert("Delete Todo", "Are you sure you want to delete this todo", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: () => deleteTodo({ id }),
+      },
+    ]);
+  };
 
   //onPress function in renderTodos func
   const handleToggleTodo = async (id: Id<"todos">) => {
@@ -45,6 +86,7 @@ export default function Index() {
 
   // Flatlist render items
   const renderTodos = ({ item }: { item: Todo }) => {
+    const isEditting = edittingId === item._id;
     return (
       <View style={homeStyles.todoItemWrapper}>
         <LinearGradient
@@ -76,39 +118,83 @@ export default function Index() {
               )}
             </LinearGradient>
           </TouchableOpacity>
-          <View>
-            <Text
-              style={[
-                homeStyles.todoText,
-                item.isComplete && {
-                  textDecorationLine: "line-through",
-                  color: colors.textMuted,
-                  opacity: 0.6,
-                },
-              ]}
-            >
-              {item.text}
-            </Text>
 
-            <View style={homeStyles.todoActions}>
-              <TouchableOpacity onPress={() => {}} activeOpacity={0.8}>
-                <LinearGradient
-                  colors={colors.gradients.warning}
-                  style={homeStyles.actionButton}
+          {isEditting ? (
+            <View style={homeStyles.editContainer}>
+              <TextInput
+                style={homeStyles.editInput}
+                value={editText}
+                onChangeText={setEditText}
+                autoFocus
+                placeholder="Edit your todo..."
+                placeholderTextColor={colors.textMuted}
+              />
+              <View style={homeStyles.editButtons}>
+                <TouchableOpacity onPress={handleSaveEdit} activeOpacity={0.8}>
+                  <LinearGradient
+                    colors={colors.gradients.success}
+                    style={homeStyles.editButton}
+                  >
+                    <Ionicons name="checkmark" size={16} color="#fff" />
+                    <Text style={homeStyles.editButtonText}>Save</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={handleCancelEdit}
+                  activeOpacity={0.8}
                 >
-                  <Ionicons name="pencil" size={14} color="#fff" />
-                </LinearGradient>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => {}} activeOpacity={0.8}>
-                <LinearGradient
-                  colors={colors.gradients.danger}
-                  style={homeStyles.actionButton}
-                >
-                  <Ionicons name="trash" size={14} color="#fff" />
-                </LinearGradient>
-              </TouchableOpacity>
+                  <LinearGradient
+                    colors={colors.gradients.muted}
+                    style={homeStyles.editButton}
+                  >
+                    <Ionicons name="close" size={16} color="#fff" />
+                    <Text style={homeStyles.editButtonText}>Cancel</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          ) : (
+            <View style={homeStyles.todoTextContainer}>
+              <Text
+                style={[
+                  homeStyles.todoText,
+                  item.isComplete && {
+                    textDecorationLine: "line-through",
+                    color: colors.textMuted,
+                    opacity: 0.6,
+                  },
+                ]}
+              >
+                {item.text}
+              </Text>
+
+              <View style={homeStyles.todoActions}>
+                <TouchableOpacity
+                  onPress={() => handleEditTodo(item)}
+                  activeOpacity={0.8}
+                >
+                  <LinearGradient
+                    colors={colors.gradients.warning}
+                    style={homeStyles.actionButton}
+                  >
+                    <Ionicons name="pencil" size={14} color="#fff" />
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleDeleteTodo(item._id)}
+                  activeOpacity={0.8}
+                >
+                  <LinearGradient
+                    colors={colors.gradients.danger}
+                    style={homeStyles.actionButton}
+                  >
+                    <Ionicons name="trash" size={14} color="#fff" />
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
         </LinearGradient>
       </View>
     );
