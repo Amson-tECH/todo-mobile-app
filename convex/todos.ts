@@ -8,7 +8,7 @@ export const getTodos = query({
     }
 })
 
-export const addTodod = mutation({
+export const addTodo = mutation({
     args: { text: v.string() },
     handler: async (ctx, args) => {
         const todoIds = await ctx.db.insert("todos", { text: args.text, isComplete: false })
