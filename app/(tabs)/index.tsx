@@ -1,5 +1,5 @@
 import { createHomeStyles } from "@/assets/styles/home.styles";
-import EmptyTodo from "@/components/EmptyTodo";
+import EmptyState from "@/components/EmptyState";
 import Header from "@/components/Header";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import TodoInput from "@/components/TodoInput";
@@ -131,7 +131,7 @@ export default function Index() {
           showsVerticalScrollIndicator={false}
           style={homeStyles.todoList}
           contentContainerStyle={homeStyles.todoListContent}
-          ListEmptyComponent={<EmptyTodo />}
+          ListEmptyComponent={<EmptyState />}
         />
       </SafeAreaView>
     </LinearGradient>
