@@ -9,7 +9,7 @@ import React from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const settings = () => {
+const Settings = () => {
   const { colors } = useTheme();
 
   const settingStyle = createSettingsStyles(colors);
@@ -46,4 +46,4 @@ const settings = () => {
   );
 };
 
-export default settings;
+export default Settings;
