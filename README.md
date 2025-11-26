@@ -2,6 +2,22 @@
 
 A beautiful, modern todo application built with React Native, Expo, and Convex. Features a stunning gradient UI, dark/light theme support, and real-time synchronization.
 
+## 📸 Live Demo
+
+### Light Theme
+<p align="center">
+  <img src="./assets/screenshots/light-home.png" width="200" alt="Light Theme Home" style="border-radius: 10px;" />
+  <img src="./assets/screenshots/light-add-todo.png" width="200" alt="Add Todo" style="border-radius: 10px;" />
+  <img src="./assets/screenshots/light-settings.png" width="200" alt="Settings" style="border-radius: 10px;" />
+</p>
+
+### Dark Theme
+<p align="center">
+  <img src="./assets/screenshots/dark-home.png" width="200" alt="Dark Theme Home" style="border-radius: 10px;" />
+  <img src="./assets/screenshots/dark-edit-todo.png" width="200" alt="Edit Todo" style="border-radius: 10px;" />
+  <img src="./assets/screenshots/dark-empty-state.png" width="200" alt="Empty State" style="border-radius: 10px;" />
+</p>
+
 ## ✨ Features
 
 - ✅ Create, read, update, and delete todos
@@ -17,12 +33,13 @@ A beautiful, modern todo application built with React Native, Expo, and Convex. 
 
 ## 🛠️ Tech Stack
 
-- **Framework:** React Native 
-- **Navigation:** Expo Router
+- **Framework:** React Native 0.81.5
+- **Navigation:** Expo Router 6.0.15
 - **Backend:** Convex (Real-time Database)
 - **UI Components:**
   - Expo Linear Gradient
   - React Native Reanimated
+  - Moti (Animations)
   - Expo Vector Icons (Ionicons)
 - **State Management:** Convex React hooks
 - **Storage:** AsyncStorage
