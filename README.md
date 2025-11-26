@@ -33,8 +33,8 @@ A beautiful, modern todo application built with React Native, Expo, and Convex. 
 
 ## 🛠️ Tech Stack
 
-- **Framework:** React Native 0.81.5
-- **Navigation:** Expo Router 6.0.15
+- **Framework:** React Native 
+- **Navigation:** Expo Router 
 - **Backend:** Convex (Real-time Database)
 - **UI Components:**
   - Expo Linear Gradient
