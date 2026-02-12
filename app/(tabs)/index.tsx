@@ -62,7 +62,7 @@ export default function Index() {
 
   if (isLoading) return <LoadingSpinner />;
 
-  // delete todo func
+  // delete todo function with alert confirmation
   const handleDeleteTodo = async (id: Id<"todos">) => {
     Alert.alert("Delete Todo", "Are you sure you want to delete this todo", [
       { text: "Cancel", style: "cancel" },
